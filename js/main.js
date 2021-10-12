@@ -20,7 +20,6 @@ import {
 // Global variables
 let selections = []
 let gameStatus = GAME_STATUS.PLAYING
-let initialTime = GAME_TIME
 
 // TODOs
 // 1. Generating colors using https://github.com/davidmerfield/randomColor
@@ -99,7 +98,6 @@ function resetGame() {
   // init new colorList
   initColors()
   // reset initialTime
-  initialTime = GAME_TIME;
   setTimer()
 }
 
@@ -114,10 +112,11 @@ function setTimer() {
   const timerText = getTimerElement()
   if (!timerText) return
 
-
+  let initialTime = GAME_TIME;
+  addGameTimerText(initialTime)
   const runTimer = setInterval(() => {
+    --initialTime
     addGameTimerText(initialTime)
-    initialTime--
 
     // win
     if(gameStatus === GAME_STATUS.FINISHED) {
@@ -125,12 +124,13 @@ function setTimer() {
       addGameTimerText('YOU WIN !!!!!!')
       showReplayButton()
     }
+    
     // game over
     if (initialTime < 0) {
+      clearInterval(runTimer)
       addGameTimerText('GAME OVER')
       gameStatus = GAME_STATUS.FINISHED
       showReplayButton()
-      clearInterval(runTimer)
     }
   }, 1000)
 }
