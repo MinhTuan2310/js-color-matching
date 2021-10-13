@@ -63,6 +63,12 @@ function handlerClick(liElement) {
     if (isWin) {
       // update gameStatus
       gameStatus = GAME_STATUS.FINISHED
+      // stop timer
+      timer.clear()
+      // show timer text
+      addGameTimerText('YOU WIN !!')
+      // show replay button
+      showReplayButton()
     }
 
     // 2 color is matched and all of its not fill;
