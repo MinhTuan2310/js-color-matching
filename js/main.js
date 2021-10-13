@@ -8,6 +8,7 @@ import {
   removeGameTimerText,
   removeClassActive,
   setBackgroundWhenMatch,
+  createTimer
 } from './utils.js'
 
 import {
@@ -20,6 +21,21 @@ import {
 // Global variables
 let selections = []
 let gameStatus = GAME_STATUS.PLAYING
+let timer = createTimer({
+  second: GAME_TIME,
+  onChange: handleTimerChange,
+  onFinish: handleTimerFinished,
+})
+
+function handleTimerChange(second) {
+  addGameTimerText(second)
+}
+
+function handleTimerFinished() {
+  gameStatus = GAME_STATUS.FINISHED;
+  addGameTimerText('GAME OVER !!')
+  showReplayButton();
+}
 
 // TODOs
 // 1. Generating colors using https://github.com/davidmerfield/randomColor
@@ -60,7 +76,9 @@ function handlerClick(liElement) {
     second.classList.remove('active')
 
     selections = []
-    gameStatus = GAME_STATUS.PLAYING
+    if(gameStatus !== GAME_STATUS.FINISHED) {
+      gameStatus = GAME_STATUS.PLAYING
+    }
   }, 500)
 }
 
@@ -97,8 +115,9 @@ function resetGame() {
   removeClassActive()
   // init new colorList
   initColors()
-  // reset initialTime
-  setTimer()
+  // start Timer
+  // setTimer()
+  timer.start()
 }
 
 function attachReplayButton() {
@@ -108,36 +127,41 @@ function attachReplayButton() {
   replayButton.addEventListener('click', resetGame)
 }
 
-function setTimer() {
-  const timerText = getTimerElement()
-  if (!timerText) return
+// function setTimer() {
+//   const timerText = getTimerElement()
+//   if (!timerText) return
 
-  let initialTime = GAME_TIME;
-  addGameTimerText(initialTime)
-  const runTimer = setInterval(() => {
-    --initialTime
-    addGameTimerText(initialTime)
+//   let initialTime = GAME_TIME;
+//   addGameTimerText(initialTime)
+//   const runTimer = setInterval(() => {
+//     --initialTime
+//     addGameTimerText(initialTime)
 
-    // win
-    if(gameStatus === GAME_STATUS.FINISHED) {
-      clearInterval(runTimer)
-      addGameTimerText('YOU WIN !!!!!!')
-      showReplayButton()
-    }
+//     // win
+//     if(gameStatus === GAME_STATUS.FINISHED) {
+//       clearInterval(runTimer)
+//       addGameTimerText('YOU WIN !!!!!!')
+//       showReplayButton()
+//     }
     
-    // game over
-    if (initialTime < 0) {
-      clearInterval(runTimer)
-      addGameTimerText('GAME OVER')
-      gameStatus = GAME_STATUS.FINISHED
-      showReplayButton()
-    }
-  }, 1000)
+//     // game over
+//     if (initialTime < 0) {
+//       clearInterval(runTimer)
+//       addGameTimerText('GAME OVER')
+//       gameStatus = GAME_STATUS.FINISHED
+//       showReplayButton()
+//     }
+//   }, 1000)
+// }
+
+function startTimer() {
+  timer.start();
 }
 
 ;(() => {
   initColors()
   attachColorInLiElementList()
   attachReplayButton()
-  setTimer()
+  // setTimer()
+  startTimer();
 })()
