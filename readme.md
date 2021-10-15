@@ -18,7 +18,7 @@ DEMO: [https://js-color-matching-peach.vercel.app/](https://js-color-matching-pe
 ## Techstacks
 
 - HTML/CSS
-- Pure Javascript
+- VanilaJS
 - Lib: [randomColor.js](https://randomcolor.lllllllllllllllll.com/) to random attractive colors
 
 Hope you enjoy playing this game 🤩
